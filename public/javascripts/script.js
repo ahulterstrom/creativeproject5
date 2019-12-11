@@ -2,7 +2,9 @@ var app = new Vue({
     el: '#app',
     data: {
         divs: [],
-        planets: [],
+        planets: [
+            []
+        ],
         captureToggle: false,
         windowwidth: '',
         windowheight: '',
@@ -15,6 +17,10 @@ var app = new Vue({
         galaxysize: 40,
         tilesizeinpx: 500,
         galaxyborder: -20,
+        playerscore: 0,
+        pizzanumber: 20,
+        componentKey: 0,
+        highscores: '',
 
         // zoom: 0.500001,
     },
@@ -40,18 +46,22 @@ var app = new Vue({
             this.captureToggle = false;
         },
         zoomin() {
-            this.zoom = (parseFloat(this.zoom) + this.zoomamount).toFixed(1);
-            var xoffset = (this.centerPoint.x * (1 - ((this.zoom - this.zoomamount) / this.zoom)));
-            var yoffset = (this.centerPoint.y * (1 - ((this.zoom - this.zoomamount) / this.zoom)));
-            this.x = parseFloat((this.x + xoffset).toFixed(0));
-            this.y = parseFloat((this.y + yoffset).toFixed(0));
+            if (this.zoom < 2.0) {
+                this.zoom = (parseFloat(this.zoom) + this.zoomamount / 2).toFixed(1);
+                var xoffset = (this.centerPoint.x * (1 - ((this.zoom - this.zoomamount / 2) / this.zoom)));
+                var yoffset = (this.centerPoint.y * (1 - ((this.zoom - this.zoomamount / 2) / this.zoom)));
+                this.x = parseFloat((this.x + xoffset).toFixed(0));
+                this.y = parseFloat((this.y + yoffset).toFixed(0));
+            }
         },
         zoomout() {
-            this.zoom = (parseFloat(this.zoom) - this.zoomamount).toFixed(1);
-            var xoffset = (this.centerPoint.x * (1 - ((this.zoom - this.zoomamount) / this.zoom)));
-            var yoffset = (this.centerPoint.y * (1 - ((this.zoom - this.zoomamount) / this.zoom)));
-            this.x = parseFloat((this.x - xoffset).toFixed(0));
-            this.y = parseFloat((this.y - yoffset).toFixed(0));
+            if (this.zoom > 0.7) {
+                this.zoom = (parseFloat(this.zoom) - this.zoomamount / 2).toFixed(1);
+                var xoffset = (this.centerPoint.x * (1 - ((this.zoom - this.zoomamount / 2) / this.zoom)));
+                var yoffset = (this.centerPoint.y * (1 - ((this.zoom - this.zoomamount / 2) / this.zoom)));
+                this.x = parseFloat((this.x - xoffset).toFixed(0));
+                this.y = parseFloat((this.y - yoffset).toFixed(0));
+            }
         },
         createarray() {
             var stars = [];
@@ -70,11 +80,71 @@ var app = new Vue({
             this.divs = stars;
             this.planets = planets;
 
-            this.planets[2][2] = "images/tile.png";
-            this.planets[9][1] = "images/tile.png";
-            this.planets[2][9] = "images/tile.png";
-            this.planets[3][6] = "images/tile.png";
+
+            this.generatepizza()
+            // this.planets[2][2] = "images/pizza.png ";
+            // this.planets[9][1] = "images/pizza.png";
+            // this.planets[2][9] = "images/pizza.png";
+            // this.planets[3][6] = "images/pizza.png";
             // this.planets[16][16] = "images/tile.png";
+        },
+        generatepizza() {
+            console.log("generating pizza");
+            for (var j = 0; j < this.galaxysize; j++) {
+                for (var i = 0; i < this.galaxysize; i++) {
+                    this.planets[j][i] = "";
+                }
+            }
+            for (j = 0; j < this.pizzanumber; j++) {
+                this.planets[Math.floor(Math.random() * 40)][Math.floor(Math.random() * 40)] = "images/pizza.png";
+            }
+            this.componentKey++;
+        },
+        pizzaclicked(row) {
+            console.log("pizzaclick(" + row + ")");
+            this.playerscore++;
+            this.generatepizza();
+
+            this.postScore();
+        },
+        pizzaHover() {
+            console.log("pizzahover");
+        },
+        async getScores() {
+            if (this.waiting == true) {
+                console.log("Still waiting for response...");
+                return;
+            }
+            console.log("requesting scores...");
+            this.waiting = true;
+            var url = "http://cs260.andrewhulterstrom.com:3010/scores";
+            try {
+                var response = await axios.get(url);
+                var data = response.data;
+                this.highscores = data;
+            }
+            catch (err) {
+                console.log("Could not get posts");
+            }
+            this.waiting = false;
+        },
+        // async submitOne(i) {
+        //     let response = await axios.put("/scores/" + this.user[i]._id, {});
+        // },
+        async postScore() {
+            console.log("postScore()");
+            var url = "http://cs260.andrewhulterstrom.com:3010/scores";
+            try {
+                var response = await axios.post(url, {
+                    userid: "id",
+                    username: "name",
+                    score: this.score,
+                });
+                // this.getScores();
+            }
+            catch (err) {
+                console.log("error");
+            }
         },
     },
     computed: {
@@ -126,6 +196,8 @@ var app = new Vue({
         this.setSize();
         this.createarray();
         window.addEventListener("resize", this.setSize);
+        this.x = -8000;
+        this.y = -8000;
         // window.addEventListener('scroll', this.zoom);
     },
 });
