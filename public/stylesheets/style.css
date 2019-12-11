@@ -1,0 +1,136 @@
+body {
+    color: white;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+}
+
+div {
+    box-sizing: border-box;
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+}
+
+#window {
+    background-color: #000000;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /*border: solid 1px white;*/
+    position: relative;
+}
+
+#map {
+    position: relative;
+}
+
+#zoomer {
+    transform-origin: top left;
+}
+
+.layer {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+}
+
+#ui {
+    /*border: solid 1px black;*/
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 10;
+}
+
+#debuginfo {
+    position: absolute;
+    border-radius: 15px;
+    top: 0;
+    width: 200px;
+    right: 0;
+    margin: 15px;
+    color: #76aafb;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6), rgba(255, 0, 0, 0));
+}
+
+#debuginfo p {
+    margin: 5px 20px;
+}
+
+#zoombuttons {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 15px;
+}
+
+#zoombuttons input {
+    box-shadow: inset 0px 1px 0px 0px #bbdaf7;
+    background: linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
+    background-color: #79bbff;
+    -webkit-border-radius: 32px / 54px;
+    border-radius: 32px / 54px;
+    border: 1px solid #84bbf3;
+    display: inline-block;
+    color: #ffffff;
+    font-size: 4rem;
+    font-weight: bold;
+    padding: 6px 24px;
+    width: 100px;
+}
+
+#row {
+    white-space: nowrap;
+    display: flex;
+}
+
+.cell {
+    display: inline-block;
+    width: 500px;
+    height: 500px;
+    /*border: solid 1px rgba(200, 200, 200, 0.1);*/
+    background-size: cover;
+    background-repeat: no-repeat;
+    /*overflow: hidden;*/
+}
+
+
+
+/*#stars1 {*/
+
+/*    background-image: url(images/stars1.png);*/
+
+/*}*/
+
+/*#stars2 {*/
+
+/*    background-image: url(images/stars2.png);*/
+
+/*}*/
+
+/*#stars3 {*/
+
+/*    background-image: url(images/stars3.png);*/
+
+/*}*/
+
+/*#stars4 {*/
+
+/*    background-image: url(images/stars4.png);*/
+
+/*}*/
+
+/*#stars5 {*/
+
+/*    background-image: url(images/stars5.png);*/
+
+/*}*/
+
+.bgcell {
+    background-image: url(../images/space.png);
+}
+
+#planetcell {}

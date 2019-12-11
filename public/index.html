@@ -1,0 +1,69 @@
+<html>
+
+<head>
+  <title>Express</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+
+</head>
+
+<body>
+  <div id="app">
+    <div id="window" @mousedown="captureOn" @mouseup="captureOff" @mousemove="mo" @mouseleave="captureOff">
+      <div id="ui">
+        <div id="debuginfo">
+          <p>window: {{windowwidth}}x{{windowheight}}</p>
+          <p>mousex: {{mousex}}</p>
+          <p>mousey: {{mousey}}</p>
+          <p>captureToggle: {{captureToggle}}</p>
+          <br>
+          <p>x: {{x}}</p>
+          <p>y: {{y}}</p>
+          <p>zoom: {{zoom}}</p>
+          <p>center: ({{centerPoint.x}}, {{centerPoint.y}})</p>
+        </div>
+        <div id="zoombuttons">
+          <input type="button" v-on:click.prevent="zoomin" value="+">
+          <input type="button" v-on:click.prevent="zoomout" value="-">
+        </div>
+      </div>
+
+
+
+      <div id="map" v-bind:style="styleObject">
+        <div id="zoomer" v-bind:style="zoomStyleObject">
+          <div id="background" class="layer">
+            <div id="row" v-for="row in divs">
+              <div class="cell bgcell" :id="cell" v-for="cell in row"></div>
+            </div>
+          </div>
+          <div id="planets" class="layer">
+            <div id="row" v-for="row in planets">
+              <div class="cell" v-for="cell in row">
+                <img v-if="cell" v-bind:src="cell">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
+  <script src="/javascripts/script.js"></script>
+</body>
+
+</html>
